@@ -8,7 +8,7 @@
 | ------ | ------ | ------ |
 | Задание 1 | * | 60 |
 | Задание 2 | * | 20 |
-| Задание 3 | # | 20 |
+| Задание 3 | * | 20 |
 
 знак "*" - задание выполнено; знак "#" - задание не выполнено;
 
@@ -35,95 +35,34 @@
 - ✨Magic ✨
 
 ## Цель работы
-Ознакомление с Anaconda, Python.Ознакомиться с основными операторами зыка Python на примере реализации линейной регрессии. 
+Ознакомление с Python, Unity.Ознакомиться с основными операторами зыка Python на примере реализации линейной регрессии. 
 
 ## Задание 1
-### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
-Ход работы:
-- Произвести подготовку данных для работы с алгоритмом линейной регрессии. 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
+### Написание Hello World на Python
 
-```py
-
-In [ ]:
-#Import the required modules, numpy for calculation, and Matplotlib for drawing
-import numpy as np
-import matplotlib.pyplot as plt
-#This code is for jupyter Notebook only
-%matplotlib inline
-
-# define data, and change list to array
-x = [3,21,22,34,54,34,55,67,89,99]
-x = np.array(x)
-y = [2,22,24,65,79,82,55,130,150,199]
-y = np.array(y)
-
-#Show the effect of a scatter plot
-plt.scatter(x,y)
-
-```
-
-- Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
+![PythonHelloWorld](https://user-images.githubusercontent.com/86101819/193023231-7a0ea4bd-3c95-480b-a4cf-437248d47b33.PNG)
 
 
 ## Задание 2
-### Должна ли величина loss стремиться к нулю при изменении исходных данных? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ.
+### Написание Hello World на Unity
 
-- Перечисленные в этом туториале действия могут быть выполнены запуском на исполнение скрипт-файла, доступного [в репозитории](https://github.com/Den1sovDm1triy/hfss-scripting/blob/main/ScreatingSphereInAEDT.py).
-- Для запуска скрипт-файла откройте Ansys Electronics Desktop. Перейдите во вкладку [Automation] - [Run Script] - [Выберите файл с именем ScreatingSphereInAEDT.py из репозитория].
-
-```py
-
-import ScriptEnv
-ScriptEnv.Initialize("Ansoft.ElectronicsDesktop")
-oDesktop.RestoreWindow()
-oProject = oDesktop.NewProject()
-oProject.Rename("C:/Users/denisov.dv/Documents/Ansoft/SphereDIffraction.aedt", True)
-oProject.InsertDesign("HFSS", "HFSSDesign1", "HFSS Terminal Network", "")
-oDesign = oProject.SetActiveDesign("HFSSDesign1")
-oEditor = oDesign.SetActiveEditor("3D Modeler")
-oEditor.CreateSphere(
-	[
-		"NAME:SphereParameters",
-		"XCenter:="		, "0mm",
-		"YCenter:="		, "0mm",
-		"ZCenter:="		, "0mm",
-		"Radius:="		, "1.0770329614269mm"
-	], 
-)
-
-```
+![2022-09-28_11-31-16](https://user-images.githubusercontent.com/86101819/193023350-812d636b-c256-47fd-83cc-628abf1bcef6.png)
 
 ## Задание 3
-### Какова роль параметра Lr? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ. В качестве эксперимента можете изменить значение параметра.
-
-- Перечисленные в этом туториале действия могут быть выполнены запуском на исполнение скрипт-файла, доступного [в репозитории](https://github.com/Den1sovDm1triy/hfss-scripting/blob/main/ScreatingSphereInAEDT.py).
-- Для запуска скрипт-файла откройте Ansys Electronics Desktop. Перейдите во вкладку [Automation] - [Run Script] - [Выберите файл с именем ScreatingSphereInAEDT.py из репозитория].
-
-```py
-
-import ScriptEnv
-ScriptEnv.Initialize("Ansoft.ElectronicsDesktop")
-oDesktop.RestoreWindow()
-oProject = oDesktop.NewProject()
-oProject.Rename("C:/Users/denisov.dv/Documents/Ansoft/SphereDIffraction.aedt", True)
-oProject.InsertDesign("HFSS", "HFSSDesign1", "HFSS Terminal Network", "")
-oDesign = oProject.SetActiveDesign("HFSSDesign1")
-oEditor = oDesign.SetActiveEditor("3D Modeler")
-oEditor.CreateSphere(
-	[
-		"NAME:SphereParameters",
-		"XCenter:="		, "0mm",
-		"YCenter:="		, "0mm",
-		"ZCenter:="		, "0mm",
-		"Radius:="		, "1.0770329614269mm"
-	], 
-)
-
-```
+### Разобраться в коде с линейной ригрессией 
+Я попробовал разобраться, что происходит, попробовал этот код, чтобы прийти к определенному результаты. Я понял, что, чем выше число повторений, тем меньше ошибка, но это еще также зависит сильно от Lr,чем выше этот показатель, тем быстрее мы уменьшаем ошибку, но тогда будет менее точным. Если Lr очень маленькое, то мы можем достич достаточно точного результата, если сделаем много повторений. Сама структура связана с математической переноской основных формул, методов, для работы с линейной гигрессией
+![1](https://user-images.githubusercontent.com/86101819/193025470-9aa03053-10eb-45a6-9579-60a46d1c343b.PNG)
+![2](https://user-images.githubusercontent.com/86101819/193025472-a0a037aa-4f48-44bc-853d-933ad4716079.PNG)
+![3](https://user-images.githubusercontent.com/86101819/193025449-a2930d15-9571-49e0-aa85-2481a2b08b19.PNG)
+![4](https://user-images.githubusercontent.com/86101819/193025456-3ab5bbb9-a3af-4bb6-84d6-fb31ea289afe.PNG)
+![5](https://user-images.githubusercontent.com/86101819/193025459-d4ea4da0-1b5f-4bb3-a123-75c0905e6e81.PNG)
+![6](https://user-images.githubusercontent.com/86101819/193025462-08000083-4ed9-426c-bbaf-924c09af12a5.PNG)
+![7](https://user-images.githubusercontent.com/86101819/193025465-9551e1cd-edfe-49b3-848b-0619bfa2a6fb.PNG)
+![8](https://user-images.githubusercontent.com/86101819/193025466-3d7ff506-e3b8-4a35-8910-1def02d2c1c0.PNG)
 
 ## Выводы
 
-Абзац умных слов о том, что было сделано и что было узнано.
+Я установил Unity, написал там Hello World, разобрался, как это все делается. Также разобрался, как написать Hello World на Python в Anaconda. Кроме того, разобрался в дополнительном задании, протестил работу, пришел к определенным выводам
 
 | Plugin | README |
 | ------ | ------ |
