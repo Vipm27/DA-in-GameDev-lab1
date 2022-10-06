@@ -67,9 +67,9 @@ sheets и google drive.
 с помощью линейной регрессии из лабораторной работы № 1
 
 Сгенерировал новую гугл таблицу, код дописал
+![2022-10-05_20-38-09](https://user-images.githubusercontent.com/86101819/194130925-b0d6c784-f82a-499f-801f-ca817fb80485.png)
 ![2022-10-05_20-38-20](https://user-images.githubusercontent.com/86101819/194130910-bd1b050b-3430-46bd-9e73-fa8ae1e9abb3.png)
 ![2022-10-05_20-38-16](https://user-images.githubusercontent.com/86101819/194130918-14fcb880-09ea-4511-863c-bb37a12bbe37.png)
-![2022-10-05_20-38-09](https://user-images.githubusercontent.com/86101819/194130925-b0d6c784-f82a-499f-801f-ca817fb80485.png)
 ![2022-10-05_20-38-24](https://user-images.githubusercontent.com/86101819/194130926-0aec3b8d-5478-4427-a44f-e63ff2c09100.png)
 ![2022-10-05_20-39-39](https://user-images.githubusercontent.com/86101819/194130996-83260d11-3eeb-413e-88a8-5ca1ccd95eaa.png)
 
