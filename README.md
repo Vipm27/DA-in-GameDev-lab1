@@ -57,8 +57,8 @@ sheets и google drive.
 ![2022-10-05_20-02-34](https://user-images.githubusercontent.com/86101819/194130430-52c23caa-a7f6-49a2-9c60-18e9540cba36.png)
 ![2022-10-05_20-02-38](https://user-images.githubusercontent.com/86101819/194130425-1966a3c7-6c1a-44e4-9c9a-523890c3b8e2.png)
 ![2022-10-05_20-02-41](https://user-images.githubusercontent.com/86101819/194130445-35b8fc31-dea4-44df-804c-b081a7547e70.png)
-![2022-10-05_19-38-42](https://user-images.githubusercontent.com/86101819/194130438-c8a08cf4-1682-4fe5-9736-06c70ef52fa4.png)
 ![2022-10-05_19-38-31](https://user-images.githubusercontent.com/86101819/194130442-3a82b4c0-a08a-4274-8efd-887bcd0ef87d.png)
+![2022-10-05_19-38-42](https://user-images.githubusercontent.com/86101819/194130438-c8a08cf4-1682-4fe5-9736-06c70ef52fa4.png)
 ![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194130546-e7d4f767-0577-4a28-a7e0-d16aa219fba9.png)
 
 
@@ -79,9 +79,9 @@ sheets и google drive.
 сопровождения в Unity в зависимости от изменения считанных данных в задании 2
 
 Переписал немного код на Unity, все работает
+![2022-10-05_20-38-44](https://user-images.githubusercontent.com/86101819/194131540-e4350563-6709-42ae-9bf6-d0499124920e.png)
 ![2022-10-05_20-38-52](https://user-images.githubusercontent.com/86101819/194131533-e73b7ec8-4b21-47de-bdd6-bd31edc4bba5.png)
 ![2022-10-05_20-38-48](https://user-images.githubusercontent.com/86101819/194131538-2a231ea4-3543-4d7c-906e-47e86fac9c55.png)
-![2022-10-05_20-38-44](https://user-images.githubusercontent.com/86101819/194131540-e4350563-6709-42ae-9bf6-d0499124920e.png)
 ![2022-10-05_20-38-56](https://user-images.githubusercontent.com/86101819/194131542-d2a17291-f5d5-4575-855c-e43836122a57.png)
 ![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194131562-2c17079f-ea6e-429a-809f-4615e4f186b7.png)
 
