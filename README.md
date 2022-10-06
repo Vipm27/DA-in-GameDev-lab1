@@ -52,10 +52,10 @@ sheets и google drive.
 
 Задание выполнено, тесты проведены успешно, звук воспроизводиться.
 
-![2022-10-05_20-02-38](https://user-images.githubusercontent.com/86101819/194130425-1966a3c7-6c1a-44e4-9c9a-523890c3b8e2.png)
+![2022-10-05_20-02-25](https://user-images.githubusercontent.com/86101819/194130436-d6efd51b-5236-4fe5-b1e3-e53d462f1f40.png)
 ![2022-10-05_20-02-34](https://user-images.githubusercontent.com/86101819/194130430-52c23caa-a7f6-49a2-9c60-18e9540cba36.png)
 ![2022-10-05_20-02-30](https://user-images.githubusercontent.com/86101819/194130434-e235fbc4-0a80-4aba-9551-4288ae144498.png)
-![2022-10-05_20-02-25](https://user-images.githubusercontent.com/86101819/194130436-d6efd51b-5236-4fe5-b1e3-e53d462f1f40.png)
+![2022-10-05_20-02-38](https://user-images.githubusercontent.com/86101819/194130425-1966a3c7-6c1a-44e4-9c9a-523890c3b8e2.png)
 ![2022-10-05_19-38-42](https://user-images.githubusercontent.com/86101819/194130438-c8a08cf4-1682-4fe5-9736-06c70ef52fa4.png)
 ![2022-10-05_19-38-31](https://user-images.githubusercontent.com/86101819/194130442-3a82b4c0-a08a-4274-8efd-887bcd0ef87d.png)
 ![2022-10-05_20-02-41](https://user-images.githubusercontent.com/86101819/194130445-35b8fc31-dea4-44df-804c-b081a7547e70.png)
