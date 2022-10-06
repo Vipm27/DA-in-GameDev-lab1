@@ -80,8 +80,8 @@ sheets и google drive.
 
 Переписал немного код на Unity, все работает
 ![2022-10-05_20-38-44](https://user-images.githubusercontent.com/86101819/194131540-e4350563-6709-42ae-9bf6-d0499124920e.png)
-![2022-10-05_20-38-52](https://user-images.githubusercontent.com/86101819/194131533-e73b7ec8-4b21-47de-bdd6-bd31edc4bba5.png)
 ![2022-10-05_20-38-48](https://user-images.githubusercontent.com/86101819/194131538-2a231ea4-3543-4d7c-906e-47e86fac9c55.png)
+![2022-10-05_20-38-52](https://user-images.githubusercontent.com/86101819/194131533-e73b7ec8-4b21-47de-bdd6-bd31edc4bba5.png)
 ![2022-10-05_20-38-56](https://user-images.githubusercontent.com/86101819/194131542-d2a17291-f5d5-4575-855c-e43836122a57.png)
 ![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194131562-2c17079f-ea6e-429a-809f-4615e4f186b7.png)
 
