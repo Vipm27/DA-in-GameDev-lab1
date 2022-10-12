@@ -39,52 +39,111 @@
 передачи данных между инструментами google, Python и Unity
 
 ## Задание 1
-###Реализовать совместную работу и передачу данных в связке Python
-- Google-Sheets – Unity. При выполнении задания используйте видео-материалы и
-исходные данные, предоставленные преподавателя курса.
-- В облачном сервисе google console подключить API для работы с google
-sheets и google drive.
-- Реализовать запись данных из скрипта на python в google-таблицу. Данные
-описывают изменение темпа инфляции на протяжении 11 отсчётных периодов, с
-учётом стоимости игрового объекта в каждый период.
-- Создать новый проект на Unity, который будет получать данные из google-
-таблицы, в которую были записаны данные в предыдущем пункте.
+###Реализовать систему машинного обучения в связке Python -
+Google-Sheets – Unity. При выполнении задания можно использовать видео-
+материалы и исходные данные, предоставленные преподавателями курса.
 
-Задание выполнено, тесты проведены успешно, звук воспроизводиться.
+Код для Roller-а
+```py
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
-![2022-10-05_20-02-25](https://user-images.githubusercontent.com/86101819/194130436-d6efd51b-5236-4fe5-b1e3-e53d462f1f40.png)
-![2022-10-05_20-02-30](https://user-images.githubusercontent.com/86101819/194130434-e235fbc4-0a80-4aba-9551-4288ae144498.png)
-![2022-10-05_20-02-34](https://user-images.githubusercontent.com/86101819/194130430-52c23caa-a7f6-49a2-9c60-18e9540cba36.png)
-![2022-10-05_20-02-38](https://user-images.githubusercontent.com/86101819/194130425-1966a3c7-6c1a-44e4-9c9a-523890c3b8e2.png)
-![2022-10-05_20-02-41](https://user-images.githubusercontent.com/86101819/194130445-35b8fc31-dea4-44df-804c-b081a7547e70.png)
-![2022-10-05_19-38-31](https://user-images.githubusercontent.com/86101819/194130442-3a82b4c0-a08a-4274-8efd-887bcd0ef87d.png)
-![2022-10-05_19-38-42](https://user-images.githubusercontent.com/86101819/194130438-c8a08cf4-1682-4fe5-9736-06c70ef52fa4.png)
-![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194130546-e7d4f767-0577-4a28-a7e0-d16aa219fba9.png)
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
+
+    public Transform Target;
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+        {
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+
+        if(distanceToTarget < 1.42f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+        else if (this.transform.localPosition.y < 0)
+        {
+            EndEpisode();
+        }
+    }
+}
+```
+Организовал среду для работы в юнити, создал и настроил объекты и сцену
+![2022-10-12_15-28-30](https://user-images.githubusercontent.com/86101819/195346824-ce986981-3d0d-4a26-9375-81ce9b40907e.png)
+
+Далее через консоль создал MLagenta и подключил его к Unity и начал обучение.
+![2022-10-12_15-32-05](https://user-images.githubusercontent.com/86101819/195347166-0445b9dc-756c-40c5-a5a1-e72d85fa9444.png)
+![2022-10-12_15-31-23](https://user-images.githubusercontent.com/86101819/195347192-aa5f92ea-0357-454c-a1e7-2c118bbdc676.png)
+
+Конфигурация для обучения была следующая
+```yaml
+behaviors:
+  RollerBall:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 10
+      buffer_size: 100
+      learning_rate: 3.0e-4
+      beta: 5.0e-4
+      epsilon: 0.2
+      lambd: 0.99
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 500000
+    time_horizon: 64
+    summary_freq: 10000
+```
+Далее получили определенную модель, которой можем пользоваться в дальнейшем 
+![2022-10-12_15-28-49](https://user-images.githubusercontent.com/86101819/195347518-f2fb5b29-fd3c-4686-af2d-918e25ab3b0a.png)
 
 
 ## Задание 2
-###Реализовать запись в Google-таблицу набора данных, полученных
-с помощью линейной регрессии из лабораторной работы № 1
-
-Сгенерировал новую гугл таблицу, код дописал
-![2022-10-05_20-38-09](https://user-images.githubusercontent.com/86101819/194130925-b0d6c784-f82a-499f-801f-ca817fb80485.png)
-![2022-10-05_20-38-16](https://user-images.githubusercontent.com/86101819/194130918-14fcb880-09ea-4511-863c-bb37a12bbe37.png)
-![2022-10-05_20-38-20](https://user-images.githubusercontent.com/86101819/194130910-bd1b050b-3430-46bd-9e73-fa8ae1e9abb3.png)
-![2022-10-05_20-38-24](https://user-images.githubusercontent.com/86101819/194130926-0aec3b8d-5478-4427-a44f-e63ff2c09100.png)
-![2022-10-05_20-39-39](https://user-images.githubusercontent.com/86101819/194130996-83260d11-3eeb-413e-88a8-5ca1ccd95eaa.png)
-
+###
 
 ## Задание 3
-###Самостоятельно разработать сценарий воспроизведения звукового
-сопровождения в Unity в зависимости от изменения считанных данных в задании 2
-
-Переписал немного код на Unity, все работает
-![2022-10-05_20-38-44](https://user-images.githubusercontent.com/86101819/194131540-e4350563-6709-42ae-9bf6-d0499124920e.png)
-![2022-10-05_20-38-48](https://user-images.githubusercontent.com/86101819/194131538-2a231ea4-3543-4d7c-906e-47e86fac9c55.png)
-![2022-10-05_20-38-52](https://user-images.githubusercontent.com/86101819/194131533-e73b7ec8-4b21-47de-bdd6-bd31edc4bba5.png)
-![2022-10-05_20-38-56](https://user-images.githubusercontent.com/86101819/194131542-d2a17291-f5d5-4575-855c-e43836122a57.png)
-![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194131562-2c17079f-ea6e-429a-809f-4615e4f186b7.png)
-
+###
 
 ## Выводы
 Было интересно поработать с Unity, привязать это все к Таблице Гугл, поработать с Python. Я считаю, что у меня получилось справится с этим заданием, узнал много нового, разобрался в коде
