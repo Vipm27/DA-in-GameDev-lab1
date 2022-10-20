@@ -44,7 +44,7 @@
 
 ![2022-10-12_15-28-30](https://user-images.githubusercontent.com/86101819/196964812-942380e4-0eb7-46f6-b4c7-c9d4c76fd7a7.png)
 2 Добавим сфере скрипт RollerAgent.cs
-```
+```cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -111,7 +111,7 @@ public class RollerAgent : Agent
 6.Модель совершенно исправно работает, шар обучается, двигается
 ## Задание 2
 ###Подробно описать каждую строку файла конфигурации нейронной сети. Самостоятельно найти информацию о компонентах Decision Requester, Behavior Parameters, добавленных сфере.
-```
+```cs
 behaviors:
   RollerBall: # указываем id агента
     trainer_type: ppo # режим обучения (Proximal Policy Optimization)
@@ -146,7 +146,7 @@ Behavior Parameters - определяет принятие объектом р�
 1. Добавим второй куб, создадим для него цвет
 ![2022-10-20_16-35-14](https://user-images.githubusercontent.com/86101819/196966748-444076bf-d6a3-49ef-ac59-43d5cd3e2edb.png)
 2. Изменяем код C#, добавляем второй таргет
-```
+```cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
