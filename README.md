@@ -1,5 +1,5 @@
 # АНАЛИЗ ДАННЫХ И ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ [in GameDev]
-Отчет по лабораторной работе #2 выполнил(а):
+Отчет по лабораторной работе #3 выполнил(а):
 - Анофриев Данил Сергеевич
 - ХПИ31
 Отметка о выполнении заданий (заполняется студентом):
@@ -39,55 +39,202 @@
 передачи данных между инструментами google, Python и Unity
 
 ## Задание 1
-###Реализовать совместную работу и передачу данных в связке Python
-- Google-Sheets – Unity. При выполнении задания используйте видео-материалы и
-исходные данные, предоставленные преподавателя курса.
-- В облачном сервисе google console подключить API для работы с google
-sheets и google drive.
-- Реализовать запись данных из скрипта на python в google-таблицу. Данные
-описывают изменение темпа инфляции на протяжении 11 отсчётных периодов, с
-учётом стоимости игрового объекта в каждый период.
-- Создать новый проект на Unity, который будет получать данные из google-
-таблицы, в которую были записаны данные в предыдущем пункте.
+###Реализовать систему машинного обучения в связке Python - Google-Sheets – Unity.
+1 Создим на сцене плоскость, шар и куб и изменим их цвета
 
-Задание выполнено, тесты проведены успешно, звук воспроизводиться.
+![2022-10-12_15-28-30](https://user-images.githubusercontent.com/86101819/196964812-942380e4-0eb7-46f6-b4c7-c9d4c76fd7a7.png)
+2 Добавим сфере скрипт RollerAgent.cs
+```
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
-![2022-10-05_20-02-25](https://user-images.githubusercontent.com/86101819/194130436-d6efd51b-5236-4fe5-b1e3-e53d462f1f40.png)
-![2022-10-05_20-02-30](https://user-images.githubusercontent.com/86101819/194130434-e235fbc4-0a80-4aba-9551-4288ae144498.png)
-![2022-10-05_20-02-34](https://user-images.githubusercontent.com/86101819/194130430-52c23caa-a7f6-49a2-9c60-18e9540cba36.png)
-![2022-10-05_20-02-38](https://user-images.githubusercontent.com/86101819/194130425-1966a3c7-6c1a-44e4-9c9a-523890c3b8e2.png)
-![2022-10-05_20-02-41](https://user-images.githubusercontent.com/86101819/194130445-35b8fc31-dea4-44df-804c-b081a7547e70.png)
-![2022-10-05_19-38-31](https://user-images.githubusercontent.com/86101819/194130442-3a82b4c0-a08a-4274-8efd-887bcd0ef87d.png)
-![2022-10-05_19-38-42](https://user-images.githubusercontent.com/86101819/194130438-c8a08cf4-1682-4fe5-9736-06c70ef52fa4.png)
-![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194130546-e7d4f767-0577-4a28-a7e0-d16aa219fba9.png)
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
 
+    public Transform Target;
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+        {
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
 
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+
+        if(distanceToTarget < 1.42f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+        else if (this.transform.localPosition.y < 0)
+        {
+            EndEpisode();
+        }
+    }
+}
+```
+3. Добавим сфере Decision Requester и Behavior Parameters
+4. В корень проекта добавим файл конфигурации нейронной сети и запустим работу ml-агена
+![2022-10-12_15-31-23](https://user-images.githubusercontent.com/86101819/196965599-15809194-8b1b-4439-a0b5-7658d39e24e7.png)
+5. Сделаем несколько копий модели TargetArea, и обучим их!
+[2022-10-12_15-28-49](https://user-images.githubusercontent.com/86101819/196966018-50eed43a-ff17-4f22-b68d-e59532c8870c.png)
+![2022-10-12_15-32-05](https://user-images.githubusercontent.com/86101819/196965768-5367dbdd-2b27-42ed-8713-86441754f074.png)
+6.Модель совершенно исправно работает, шар обучается, двигается
 ## Задание 2
-###Реализовать запись в Google-таблицу набора данных, полученных
-с помощью линейной регрессии из лабораторной работы № 1
+###Подробно описать каждую строку файла конфигурации нейронной сети. Самостоятельно найти информацию о компонентах Decision Requester, Behavior Parameters, добавленных сфере.
+```
+behaviors:
+  RollerBall: # указываем id агента
+    trainer_type: ppo # режим обучения (Proximal Policy Optimization)
+    hyperparameters:
+      batch_size: 10 # количество опытов на каждой итерации
+      buffer_size: 100 # количество опыта, которое нужно набрать перед обновлением модели
+      learning_rate: 3.0e-4 # начальная скорость обучения
+      beta: 5.0e-4 # сила регуляции энтропии, увеличивает случайность действий
+      epsilon: 0.2 # порог расхождений между старой и новой политиками при обновлении
+      lambd: 0.99 # параметр регуляции, насколько сильно агент полагается на текущий value estimate
+      num_epoch: 3 # количество проходов через буфер опыта, при выполнении оптимизации
+      learning_rate_schedule: linear # определяет как скорость обучения изменяется с течением времени
+                                     # linear линейно уменьшает скорость
+    network_settings:
+      normalize: false # отключаем нормализацию входных данных
+      hidden_units: 128 # количество нейронов в скрытых слоях сети
+      num_layers: 2 # количество скрытых слоёв в сети
+    reward_signals:
+      extrinsic:
+        gamma: 0.99 # коэффициент скидки для будущих вознаграждений
+        strength: 1.0 # коэффициент на который умножается вознаграждение
+    max_steps: 500000 # общее количество шагов, которые должны быть выполнены в среде до завершения обучения
+    time_horizon: 64 # сколько опыта нужно собрать для каждого агента, прежде чем добавлять его в буфер
+    summary_freq: 10000 # количество опыта, который необходимо собрать перед созданием и отображением статистики
+```
+Decision Requester - запрашивает решение через регулярные промежутки времени.
 
-Сгенерировал новую гугл таблицу, код дописал
-![2022-10-05_20-38-09](https://user-images.githubusercontent.com/86101819/194130925-b0d6c784-f82a-499f-801f-ca817fb80485.png)
-![2022-10-05_20-38-16](https://user-images.githubusercontent.com/86101819/194130918-14fcb880-09ea-4511-863c-bb37a12bbe37.png)
-![2022-10-05_20-38-20](https://user-images.githubusercontent.com/86101819/194130910-bd1b050b-3430-46bd-9e73-fa8ae1e9abb3.png)
-![2022-10-05_20-38-24](https://user-images.githubusercontent.com/86101819/194130926-0aec3b8d-5478-4427-a44f-e63ff2c09100.png)
-![2022-10-05_20-39-39](https://user-images.githubusercontent.com/86101819/194130996-83260d11-3eeb-413e-88a8-5ca1ccd95eaa.png)
-
+Behavior Parameters - определяет принятие объектом решений, в него указывается какой тип поведения будет использоваться: уже обученная модель или удалённый процесс обучения.
 
 ## Задание 3
-###Самостоятельно разработать сценарий воспроизведения звукового
-сопровождения в Unity в зависимости от изменения считанных данных в задании 2
+###Доработать сцену и обучить ML-Agent таким образом, чтобы шар перемещался между двумя кубами разного цвета. Кубы должны, как и впервом задании, случайно изменять кооринаты на плоскости.
+1. Добавим второй куб, создадим для него цвет
+![2022-10-20_16-35-14](https://user-images.githubusercontent.com/86101819/196966748-444076bf-d6a3-49ef-ac59-43d5cd3e2edb.png)
+2. Изменяем код C#, добавляем второй таргет
+```
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
-Переписал немного код на Unity, все работает
-![2022-10-05_20-38-44](https://user-images.githubusercontent.com/86101819/194131540-e4350563-6709-42ae-9bf6-d0499124920e.png)
-![2022-10-05_20-38-48](https://user-images.githubusercontent.com/86101819/194131538-2a231ea4-3543-4d7c-906e-47e86fac9c55.png)
-![2022-10-05_20-38-52](https://user-images.githubusercontent.com/86101819/194131533-e73b7ec8-4b21-47de-bdd6-bd31edc4bba5.png)
-![2022-10-05_20-38-56](https://user-images.githubusercontent.com/86101819/194131542-d2a17291-f5d5-4575-855c-e43836122a57.png)
-![2022-10-05_20-39-58](https://user-images.githubusercontent.com/86101819/194131562-2c17079f-ea6e-429a-809f-4615e4f186b7.png)
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
 
+    public GameObject Target1;
+    public GameObject Target2;
+    private bool target1Collected;
+    private bool target2Collected;
+    public override void OnEpisodeBegin()
+    {
+          if (this.transform.localPosition.y < 0)
+    {
+        this.rBody.angularVelocity = Vector3.zero;
+        this.rBody.velocity = Vector3.zero;
+        this.transform.localPosition = new Vector3(0, 0.5f, 0);
+    }
+
+    Target1.transform.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    Target2.transform.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    Target1.SetActive(true);
+    Target2.SetActive(true);
+    target1Collected = false;
+    target2Collected = false;
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+         sensor.AddObservation(Target1.transform.localPosition);
+    sensor.AddObservation(Target2.transform.localPosition);
+    sensor.AddObservation(this.transform.localPosition);
+    sensor.AddObservation(target1Collected);
+    sensor.AddObservation(target2Collected);
+    sensor.AddObservation(rBody.velocity.x);
+    sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {Vector3 controlSignal = Vector3.zero;
+    controlSignal.x = actionBuffers.ContinuousActions[0];
+    controlSignal.z = actionBuffers.ContinuousActions[1];
+    rBody.AddForce(controlSignal * forceMultiplier);
+
+    float distanceToTarget1 = Vector3.Distance(this.transform.localPosition, Target1.transform.localPosition);
+    float distanceToTarget2 = Vector3.Distance(this.transform.localPosition, Target2.transform.localPosition);
+
+    if (!target1Collected & distanceToTarget1 < 1.42f)
+    {
+        target1Collected = true;
+        Target1.SetActive(false);
+    }
+
+    if (!target2Collected & distanceToTarget2 < 1.42f)
+    {
+        target2Collected = true;
+        Target2.SetActive(false);
+    }
+
+    if(target1Collected & target2Collected)
+    {
+        SetReward(1.0f);
+        EndEpisode();
+    }
+    else if (this.transform.localPosition.y < 0)
+    {
+        EndEpisode();
+    }
+}
+}
+```
+3.Создаем несколько моделей и обучаем их
+![2022-10-20_16-34-53](https://user-images.githubusercontent.com/86101819/196967173-9e02abf5-5c71-43bc-8afe-05cffe0c7a43.png)
+4.Получаем корректную работу и обученную модель, которая работает с двумя кубами одновременно
+![2022-10-20_16-46-38](https://user-images.githubusercontent.com/86101819/196967755-0646048c-48c3-4ab6-b6ac-a17c071d5810.png)
 
 ## Выводы
-Было интересно поработать с Unity, привязать это все к Таблице Гугл, поработать с Python. Я считаю, что у меня получилось справится с этим заданием, узнал много нового, разобрался в коде
+По итогу, я понял, и научился работать с MLagent-ом, разобрался в его структуре, способе применения, конфигурации. Понравилось работать с данной технологией.
+Баланс в играх, как мне кажется, заключается в сложности и интересности игрового опыта, ибо баланс позволяет задавать правила игры и челенджи для игрока. Машинное обучение служит хорошим инструментом, чтобы задавать окружению или NPC тех качеств и способносей, которые смогут разнообразить опыт игрока, сделать его более увлекательным и живым, проработанным и способным составить конкуренцию игроку
 
 | Plugin | README |
 | ------ | ------ |
